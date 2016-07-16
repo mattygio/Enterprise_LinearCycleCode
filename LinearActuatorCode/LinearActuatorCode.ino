@@ -31,6 +31,8 @@ void setup() {
 pinMode(forwards, OUTPUT);//set relay as an output
 pinMode(backwards, OUTPUT);//set relay as an output
 pinMode(MotorForward, OUTPUT);
+digitalWrite(forwards, LOW);
+digitalWrite(backwards, LOW);
 pinMode(LinActButton,INPUT);
 pinMode(MotorButton, INPUT);
 Motor(spinning); 
@@ -106,19 +108,19 @@ void LinAct() {
  digitalWrite(forwards, LOW);
  digitalWrite(backwards, HIGH);//Activate the relay one direction, they must be 
  //different to move the motor
-// delay(4000); // wait 2 seconds
+ delay(4000); // wait 2 seconds
 
- digitalWrite(forwards, HIGH);
- digitalWrite(backwards, HIGH);//Deactivate both relays to brake the motor
-// delay(8000);// wait 2 seconds
+ digitalWrite(forwards, LOW);
+ digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
+ delay(2000);// wait 2 seconds
 
  digitalWrite(forwards, HIGH);
  digitalWrite(backwards, LOW);//Activate the relay the other direction, they must be different 
  //to move the motor
-// delay(4000);// wait 2 seconds
+ delay(4000);// wait 2 seconds
 
- digitalWrite(forwards, HIGH);
- digitalWrite(backwards, HIGH);//Deactivate both relays to brake the motor
+ digitalWrite(forwards, LOW);
+ digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
 // delay(4000);// wait 2 seconds
 
  Serial.println("Linear Actuator Cycle Complete");
@@ -130,8 +132,8 @@ void Motor(boolean spin){
    Serial.println(spin); 
    Serial.println("");
    if(spin){
-     digitalWrite(MotorForward, HIGH); 
+     digitalWrite(MotorForward, LOW); 
   }else if(!spin){
-     digitalWrite(MotorForward, LOW);//Deactivate relay to brake the motor
+     digitalWrite(MotorForward, HIGH);//Deactivate relay to brake the motor
   }
 }
