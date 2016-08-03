@@ -8,8 +8,8 @@
 */
 
 
-const int forwards = 13; //Attach to forward relay for LinAct
-const int backwards = 10; //Attach to reverse relay for LinAct
+const int forwards = 12; //Attach to Number 3 on relay
+const int backwards = 10; //Attach to Number 4 on relay
 const int MotorForward = 8; // Attach to motor relay
 const int LinActButton = 9; //Control Pin for Linear Actuator
 const int MotorButton = 2; //Control Pin for Motor
@@ -105,22 +105,22 @@ void LinAct() {
   
  Serial.println("Linear Actuator Cycle");
 
- digitalWrite(forwards, LOW);
+// digitalWrite(forwards, LOW);
  digitalWrite(backwards, HIGH);//Activate the relay one direction, they must be 
  //different to move the motor
  delay(4000); // wait 2 seconds
 
- digitalWrite(forwards, LOW);
+// digitalWrite(forwards, LOW);
  digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
  delay(2000);// wait 2 seconds
 
  digitalWrite(forwards, HIGH);
- digitalWrite(backwards, LOW);//Activate the relay the other direction, they must be different 
+// digitalWrite(backwards, LOW);//Activate the relay the other direction, they must be different 
  //to move the motor
  delay(4000);// wait 2 seconds
 
  digitalWrite(forwards, LOW);
- digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
+// digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
 // delay(4000);// wait 2 seconds
 
  Serial.println("Linear Actuator Cycle Complete");

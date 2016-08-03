@@ -8,7 +8,7 @@
 */
 
 
-const int forwards = 13; //Attach to forward relay for LinAct
+const int forwards = 12; //Attach to forward relay for LinAct
 const int backwards = 10; //Attach to reverse relay for LinAct
 const int MotorForward = 8; // Attach to motor relay
 const int LinActButton = 9; //Control Pin for Linear Actuator
@@ -18,7 +18,8 @@ long MotorlastDebounceTime = 0;  // the last time the output pin was toggled
 long MotordebounceDelay = 100; 
 int MotorbuttonState;             // the current reading from the input pin
 int MotorlastButtonState = LOW;   // the previous reading from the input pin
-boolean spinning = false;
+volatile boolean spinning = false;
+volatile unsigned long prevInterDebounce = 0;
 
 long LinActlastDebounceTime = 0;  // the last time the output pin was toggled
 long LinActdebounceDelay = 100; 
@@ -58,7 +59,7 @@ void loop() {
     if (Motorreading != MotorbuttonState) {
       MotorbuttonState = Motorreading;
       if (MotorbuttonState == HIGH) {
-        spinning = !spinning;
+//        spinning = !spinning;
         Motor();
       }
     }
@@ -107,22 +108,22 @@ void LinAct() {
  
  Serial.println("Linear Actuator Cycle");
 
- digitalWrite(forwards, LOW);
+// digitalWrite(forwards, LOW);
  digitalWrite(backwards, HIGH);//Activate the relay one direction, they must be 
  //different to move the motor
- delay(4000); // wait 2 seconds
+ delay(8000); // wait 2 seconds
 
- digitalWrite(forwards, LOW);
+// digitalWrite(forwards, LOW);
  digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
- delay(2000);// wait 2 seconds
-
- digitalWrite(forwards, HIGH);
- digitalWrite(backwards, LOW);//Activate the relay the other direction, they must be different 
- //to move the motor
  delay(4000);// wait 2 seconds
 
+ digitalWrite(forwards, HIGH);
+// digitalWrite(backwards, LOW);//Activate the relay the other direction, they must be different 
+ //to move the motor
+ delay(8000);// wait 2 seconds
+
  digitalWrite(forwards, LOW);
- digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
+// digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
 // delay(4000);// wait 2 seconds
 
  Serial.println("Linear Actuator Cycle Complete");
@@ -131,12 +132,17 @@ void LinAct() {
 }
 
 void Motor(){
-   Serial.println("Motor Function");
-   Serial.println(spinning); 
-   Serial.println("");
-   if(spinning){
-     digitalWrite(MotorForward, LOW); 
-  }else if(!spinning){
-     digitalWrite(MotorForward, HIGH);//Deactivate relay to brake the motor
-  }
+   if(millis() > prevInterDebounce + 250 )
+   {
+       Serial.println("Motor Function");
+       Serial.println(spinning); 
+       Serial.println("");
+       if(spinning){
+         digitalWrite(MotorForward, LOW); 
+      }else if(!spinning){
+         digitalWrite(MotorForward, HIGH);//Deactivate relay to brake the motor
+      }
+      spinning = !spinning;
+      prevInterDebounce = millis();
+   }
 }
