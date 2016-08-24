@@ -10,7 +10,7 @@
 
 const int forwards = 12; //Attach to Number 3 on relay
 const int backwards = 10; //Attach to Number 4 on relay
-const int MotorForward = 8; // Attach to motor relay
+const int MotorForward = 6; // Attach to motor relay
 const int LinActButton = 9; //Control Pin for Linear Actuator
 const int MotorButton = 2; //Control Pin for Motor
 
