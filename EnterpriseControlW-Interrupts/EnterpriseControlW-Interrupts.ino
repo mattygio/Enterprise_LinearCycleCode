@@ -14,17 +14,17 @@ const int MotorForward = 10; // Attach to motor relay
 const int LinActButton = 9; //Control Pin for Linear Actuator
 const int MotorButton = 3; //Control Pin for Motor
 
-long MotorlastDebounceTime = 0;  // the last time the output pin was toggled
-long MotordebounceDelay = 100; 
-int MotorbuttonState;             // the current reading from the input pin
-int MotorlastButtonState = LOW;   // the previous reading from the input pin
+//long MotorlastDebounceTime = 0;  // the last time the output pin was toggled
+//long MotordebounceDelay = 100; 
+//int MotorbuttonState;             // the current reading from the input pin
+//int MotorlastButtonState = LOW;   // the previous reading from the input pin
 volatile boolean spinning = false;
 volatile unsigned long prevInterDebounce = 0;
-
-long LinActlastDebounceTime = 0;  // the last time the output pin was toggled
-long LinActdebounceDelay = 100; 
-int LinActbuttonState;             // the current reading from the input pin
-int LinActlastButtonState = LOW;
+//
+//long LinActlastDebounceTime = 0;  // the last time the output pin was toggled
+//long LinActdebounceDelay = 100; 
+//int LinActbuttonState;             // the current reading from the input pin
+//int LinActlastButtonState = LOW;
 
 
 void setup() {
@@ -37,37 +37,38 @@ digitalWrite(backwards, LOW);
 pinMode(LinActButton,INPUT);
 pinMode(MotorButton, INPUT);
 Motor(); 
-Serial.begin(9600);
+//Serial.begin(9600);
+attachInterrupt(digitalPinToInterrupt(MotorButton), Motor, RISING);
 
 }
 
 void loop() {
   // read the state of the switch into a local variable:
-  int Motorreading = digitalRead(MotorButton);
-
-  // If the switch changed, due to noise or pressing:
-  if (Motorreading != MotorlastButtonState) {
-    // reset the debouncing timer
-    MotorlastDebounceTime = millis();
-  }
-
-  if ((millis() - MotorlastDebounceTime) > MotordebounceDelay) {
-    // whatever the reading is at, it's been there for longer
-    // than the debounce delay, so take it as the actual current state:
-
-    // if the button state has changed:
-    if (Motorreading != MotorbuttonState) {
-      MotorbuttonState = Motorreading;
-      if (MotorbuttonState == HIGH) {
-//        spinning = !spinning;
-        Motor();
-      }
-    }
-  }
-
-  // save the reading.  Next time through the loop,
-  // it'll be the lastButtonState:
-  MotorlastButtonState = Motorreading;
+//  int Motorreading = digitalRead(MotorButton);
+//
+//  // If the switch changed, due to noise or pressing:
+//  if (Motorreading != MotorlastButtonState) {
+//    // reset the debouncing timer
+//    MotorlastDebounceTime = millis();
+//  }
+//
+//  if ((millis() - MotorlastDebounceTime) > MotordebounceDelay) {
+//    // whatever the reading is at, it's been there for longer
+//    // than the debounce delay, so take it as the actual current state:
+//
+//    // if the button state has changed:
+//    if (Motorreading != MotorbuttonState) {
+//      MotorbuttonState = Motorreading;
+//      if (MotorbuttonState == HIGH) {
+////        spinning = !spinning;
+//        Motor();
+//      }
+//    }
+//  }
+//
+//  // save the reading.  Next time through the loop,
+//  // it'll be the lastButtonState:
+//  MotorlastButtonState = Motorreading;
   
   /**
      This section is for Linear Actuator Control
@@ -75,38 +76,49 @@ void loop() {
      will extend. Wait 8 seconds and then retract.  
   */
   
-  int LinActreading = digitalRead(LinActButton);
+//  int LinActreading = digitalRead(LinActButton);
+//
+//  // If the switch changed, due to noise or pressing:
+//  if (LinActreading != LinActlastButtonState) {
+//    // reset the debouncing timer
+//    LinActlastDebounceTime = millis();
+//  }
+//
+//  if ((millis() - LinActlastDebounceTime) > LinActdebounceDelay) {
+//    // whatever the reading is at, it's been there for longer
+//    // than the debounce delay, so take it as the actual current state:
+//
+//    // if the button state has changed:
+//    if (LinActreading != LinActbuttonState) {
+//      LinActbuttonState = LinActreading;
+//      if (LinActbuttonState == HIGH) {
+//        LinAct();
+//      }
+//    }
+//  }
+//
+//  // save the reading.  Next time through the loop,
+//  // it'll be the lastButtonState:
+//  LinActlastButtonState = LinActreading;
+  while(!digitalRead(LinActButton));
+  LinAct();
 
-  // If the switch changed, due to noise or pressing:
-  if (LinActreading != LinActlastButtonState) {
-    // reset the debouncing timer
-    LinActlastDebounceTime = millis();
-  }
+  
 
-  if ((millis() - LinActlastDebounceTime) > LinActdebounceDelay) {
-    // whatever the reading is at, it's been there for longer
-    // than the debounce delay, so take it as the actual current state:
+//  int LinActreading = digitalRead(LinActButton);
 
-    // if the button state has changed:
-    if (LinActreading != LinActbuttonState) {
-      LinActbuttonState = LinActreading;
-      if (LinActbuttonState == HIGH) {
-        LinAct();
-      }
-    }
-  }
-
-  // save the reading.  Next time through the loop,
-  // it'll be the lastButtonState:
-  LinActlastButtonState = LinActreading;
+//  if (LinActreading ==  1) {
+//      LinAct();
+//  }
+  
 
 }
 
 void LinAct() {
   
- attachInterrupt(digitalPinToInterrupt(MotorButton), Motor, RISING);
+// attachInterrupt(digitalPinToInterrupt(MotorButton), Motor, RISING);
  
- Serial.println("Linear Actuator Cycle");
+// Serial.println("Linear Actuator Cycle");
 
 // digitalWrite(forwards, LOW);
  digitalWrite(backwards, HIGH);//Activate the relay one direction, they must be 
@@ -126,23 +138,25 @@ void LinAct() {
 // digitalWrite(backwards, LOW);//Deactivate both relays to brake the motor
 // delay(4000);// wait 2 seconds
 
- Serial.println("Linear Actuator Cycle Complete");
- Serial.println("");
- detachInterrupt(digitalPinToInterrupt(MotorButton));
+// Serial.println("Linear Actuator Cycle Complete");
+// Serial.println("");
+// detachInterrupt(digitalPinToInterrupt(MotorButton));
 }
 
 void Motor(){
    if(millis() > prevInterDebounce + 250 )
    {
-       Serial.println("Motor Function");
-       Serial.println(spinning); 
-       Serial.println("");
+//  delay(100);
+//       Serial.println("Motor Function");
+//       Serial.println(spinning); 
+//       Serial.println("");
        if(spinning){
          digitalWrite(MotorForward, LOW); 
       }else if(!spinning){
          digitalWrite(MotorForward, HIGH);//Deactivate relay to brake the motor
       }
       spinning = !spinning;
+//  delay(1000);
       prevInterDebounce = millis();
    }
 }
