@@ -6,7 +6,7 @@ This code is for the Enterprise being built my the Drexel Theme Park Engineering
 
 ## Light_Control
 
-Script that the Arduino in the center uses to Control the lights. Will write a few scripts that use the MAX 72XX IC and one that doesn’t. After evaluation of the code and performance of the hardware and LEDs, one will be put in production.
+Script that the Arduino in the center uses to control the lights. Will write a few scripts that use the MAX 72XX IC and one that doesn’t. After evaluation of the code and performance of the hardware and LEDs, I decided to use the MAX 72XX IC chip. It regulates the power and is easy to code the lights.
 
 ## RaspberryPi_Control
 
