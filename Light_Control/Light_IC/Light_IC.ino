@@ -9,11 +9,11 @@
  *  4/9/17
  *  
  *  Notes to self on style of LEDs
- *  1. light up one from inner circle to outer circle
- *  2. turn off one from inner circle to outer circle
- *  3. Turn each LED on from inner circle to outer circle while 
+ *  0. light up one from inner circle to outer circle
+ *  1. turn off one from inner circle to outer circle
+ *  2. Turn each LED on from inner circle to outer circle while 
  *    keeping them all on. then flash them twice
- *  4. Randomly turn on one LED and flash and turn off
+ *  3. Randomly turn on one LED and flash and turn off
  */
  
 #include <LedControl.h>
@@ -24,13 +24,16 @@ LedControl lc1 = LedControl(11,10,9,1);
 //clock pin 10
 //csPin 9
 //1 device total
-int T = 200;
+int T = 500;
 int state;
 
 void setup() {
-  lc1.setIntensity(0,15); //Intensity goes from 0 to 15
+  lc1.setIntensity(0,7); //Intensity goes from 0 to 15
   lc1.clearDisplay(0);
   lc1.shutdown(0, false);
+  Serial.begin(9600);
+  randomSeed(78);
+
   
 }
 
@@ -39,6 +42,8 @@ void loop() {
      // valid coordinates 00 01 02 03
      //                   10 11 12 13
   state = random(4);
+  Serial.print("State of LEDs: ");
+  Serial.println(state);
   if (state == 0){
     State0();
   }
@@ -79,9 +84,9 @@ void State1(){
       setControl_Group(i,true);
     }
     setALL_LEDs(false);
-    delay(T*2);
-    setALL_LEDs(true);
     delay(T/2);
+    setALL_LEDs(true);
+    delay(T*2);
   }
 }
 
@@ -91,13 +96,14 @@ void State2() {
     for(int i = 0; i<4; i++){ // step through each LED
       setControl_Group(i,true);
       delay(T);
-      for(int k = 0; k < 3; k++){
-        setALL_LEDs(false);
-        delay(T/2);
-        setALL_LEDs(true);
-        delay(T/2);
-      }
     }
+   for(int k = 0; k < 3; k++){
+    setALL_LEDs(false);
+    delay(T/2);
+    setALL_LEDs(true);
+    delay(T/2);
+    }
+    setALL_LEDs(false);
   }
 }
 
@@ -108,6 +114,7 @@ void State3(){
   for(int h = 0; h < 20; h++){
     Group = random(4);
     setControl_Group(Group,onoff[Group]);
+    delay(T/2);
     onoff[Group] = !onoff[Group];
   }
 }
@@ -116,32 +123,32 @@ void State3(){
 void setControl_Group(int GroupNum, bool onoff)
 {
   if (GroupNum == 0){
-      lc1.setLed(0,0,0,onoff);
-      lc1.setLed(0,0,1,onoff);
+    lc1.setLed(0,0,0,onoff);
+    lc1.setLed(0,1,0,onoff);
   }
   else if (GroupNum == 1){
-      lc1.setLed(0,0,2,onoff);
-      lc1.setLed(0,0,3,onoff);
+    lc1.setLed(0,2,0,onoff);
+    lc1.setLed(0,3,0,onoff);
   }
   else if (GroupNum == 2){
-      lc1.setLed(0,0,4,onoff);
-      lc1.setLed(0,0,5,onoff);
+    lc1.setLed(0,4,0,onoff);
+    lc1.setLed(0,5,0,onoff);
   }
-    else if (GroupNum == 3){
-      lc1.setLed(0,0,6,onoff);
-      lc1.setLed(0,0,7,onoff);
+  else if (GroupNum == 3){
+    lc1.setLed(0,6,0,onoff);
+    lc1.setLed(0,7,0,onoff);
   }
 }
 
 void setALL_LEDs(bool onoff){
   lc1.setLed(0,0,0,onoff);
-  lc1.setLed(0,0,1,onoff);
-  lc1.setLed(0,0,2,onoff);
-  lc1.setLed(0,0,3,onoff);
-  lc1.setLed(0,0,4,onoff);
-  lc1.setLed(0,0,5,onoff);
-  lc1.setLed(0,0,6,onoff);
-  lc1.setLed(0,0,7,onoff);
+  lc1.setLed(0,1,0,onoff);
+  lc1.setLed(0,2,0,onoff);
+  lc1.setLed(0,3,0,onoff);
+  lc1.setLed(0,4,0,onoff);
+  lc1.setLed(0,5,0,onoff);
+  lc1.setLed(0,6,0,onoff);
+  lc1.setLed(0,7,0,onoff);
 }
 
 
