@@ -50,13 +50,13 @@ void LinAct() {
  delay(2000);
 
  digitalWrite(backwards, HIGH);//Activate the relay one direction, they must be 
- delay(20000); // wait 2 seconds
+ delay(22000); // wait 2 seconds
 
  digitalWrite(backwards, LOW);//Deactivate both relays to brake the LA
  delay(6000);// wait 2 seconds
 
  digitalWrite(forwards, HIGH);
- delay(20000);// wait 2 seconds
+ delay(22000);// wait 2 seconds
 
  digitalWrite(forwards, LOW);
 
